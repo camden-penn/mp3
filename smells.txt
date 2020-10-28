@@ -1,0 +1,1 @@
+1. Duplicated code: move code into a method and refer to the method when the code is needed.
