@@ -884,6 +884,11 @@ public class Jenkins extends AbstractCIBase implements DirectlyModifiableTopLeve
      * @param is
      *      If non-null, this can be consulted for ignoring some tasks. Only used during the initialization of Jenkins.
      */
+    public void updateAndTrim(){
+        this.updateComputerList();
+	this.trimLabels();
+    } 
+
     private void executeReactor(final InitStrategy is, TaskBuilder... builders) throws IOException, InterruptedException, ReactorException {
         Reactor reactor = new Reactor(builders) {
             /**

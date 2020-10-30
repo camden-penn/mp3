@@ -85,12 +85,6 @@ public class Nodes implements Saveable {
         this.jenkins = jenkins;
     }
 
-
-    protected void updateAndTrim(){
-        jenkins.updateComputerList();
-	jenkins.trimLabels();
-    }
-
     /**
      * Returns the list of nodes.
      *
@@ -118,7 +112,7 @@ public class Nodes implements Saveable {
                     Nodes.this.nodes.put(name, n);
                 }
                 Nodes.this.nodes.keySet().removeAll(toRemove); // directory clean up will be handled by save
-                Nodes.this.updateAndTrim();
+                jenkins.updateAndTrim();
             }
         });
         save();
@@ -138,7 +132,7 @@ public class Nodes implements Saveable {
                 @Override
                 public void run() {
                     nodes.put(node.getNodeName(), node);
-                    Nodes.this.updateAndTrim();
+                    jenkins.updateAndTrim();
                 }
             });
             // no need for a full save() so we just do the minimum
@@ -170,7 +164,7 @@ public class Nodes implements Saveable {
                         c.disconnect(OfflineCause.create(hudson.model.Messages._Hudson_NodeBeingRemoved()));
                     }
                     if (node == nodes.remove(node.getNodeName())) {
-                        Nodes.this.updateAndTrim();
+                        jenkins.updateAndTrim();
                     }
                 }
             });
@@ -254,7 +248,7 @@ public class Nodes implements Saveable {
                     }
                 }
                 nodes.putAll(newNodes);
-                Nodes.this.updateAndTrim();
+                jenkins.updateAndTrim();
             }
         });
     }

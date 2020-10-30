@@ -1,1 +1,2 @@
 1. Duplicated code: move code into a method and refer to the method when the code is needed.
+3. Feature envy: move the method into the class where it fits better.
