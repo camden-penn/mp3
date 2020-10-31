@@ -145,6 +145,11 @@ public class Connection {
     public KeyAgreement diffieHellman(boolean side) throws IOException, GeneralSecurityException {
         return diffieHellman(side,512);
     }
+    private KeyPair generateKeyPairWithSpec(DHParameterSpec spec)throws GeneralSecurityException{
+        KeyPairGenerator dh = KeyPairGenerator.getInstance("DH");
+        dh.initialize(spec);
+        return dh.generateKeyPair();
+    }
     public KeyAgreement diffieHellman(boolean side, int keySize) throws IOException, GeneralSecurityException {
         KeyPair keyPair;
         PublicKey otherHalf;
@@ -153,19 +158,13 @@ public class Connection {
             AlgorithmParameterGenerator paramGen = AlgorithmParameterGenerator.getInstance("DH");
             paramGen.init(keySize);
 
-            KeyPairGenerator dh = KeyPairGenerator.getInstance("DH");
-            dh.initialize(paramGen.generateParameters().getParameterSpec(DHParameterSpec.class));
-            keyPair = dh.generateKeyPair();
-
+	    keyPair = generateKeyPairWithSpec(paramGen.generateParameters().getParameterSpec(DHParameterSpec.class)); 
             // send a half and get a half
             writeKey(keyPair.getPublic());
             otherHalf = KeyFactory.getInstance("DH").generatePublic(readKey());
         } else {
             otherHalf = KeyFactory.getInstance("DH").generatePublic(readKey());
-
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("DH");
-            keyPairGen.initialize(((DHPublicKey) otherHalf).getParams());
-            keyPair = keyPairGen.generateKeyPair();
+            keyPair = generateKeyPairWithSpec(((DHPublicKey) otherHalf).getParams());
 
             // send a half and get a half
             writeKey(keyPair.getPublic());
