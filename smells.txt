@@ -1,3 +1,4 @@
 1. Duplicated code: move code into a method and refer to the method when the code is needed.
 3. Feature envy: move the method into the class where it fits better.
 4. Wrap it into a loop.
+6. jenkins/test/src/test/java/hudson/model/RunParameterDefinitionTest.java contains duplicated initialization of several FreeStyleBuilds in its build-filter tests. To fix it, I'd pull the initialization into a helper function, but I ran out of time before the deadline to do so. Oops.
